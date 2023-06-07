@@ -1,7 +1,6 @@
 # BlazorApp
 
-A small application, on the Asp stack.Net Core, Blazor,
-Entity Framework Core, MySql.
+A small application, on the Asp.Net Core, Blazor, Entity Framework Core, MySql.
 
 ## What can he do?
 - creating list items;
@@ -10,5 +9,5 @@ Entity Framework Core, MySql.
 - changing the status of an element.
 
 ## How to use it?
-- create a migration
-- launch
+- create a migration to mysql database;
+- launch.
