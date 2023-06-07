@@ -1,0 +1,79 @@
+﻿@page "/addtask"
+
+@using BlazorApp
+@inject DbService Db
+
+<div>
+    <div style="@IsOk" class="alert alert-success" role="alert">
+        Успешно!
+    </div>
+    <div style="@IsError" class="alert alert-danger" role="alert">
+        Ошибка - @error
+    </div>
+
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1">Заголовок</label>
+        <input @bind-value="@Task.title" class="form-control" type="text">
+    </div>
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1">Описание</label>
+        <textarea @bind="@Task.description" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+
+    <button class="btn btn-primary" @onclick="Clicked">Сохранить</button>
+</div>
+
+@code {
+    IEnumerable<BlazorApp.Models.Status> names;
+
+    private Models.Task Task = new Models.Task();
+    private string? error;
+    private bool isOk = false;
+    private bool isError = false;
+    private const string hiddedString = "display:none;";
+
+    private string IsOk
+    {
+        get
+        {
+            return isOk ? "" : hiddedString;
+        }
+    }
+
+    private string IsError
+    {
+        get
+        {
+            return isError ? "" : hiddedString;
+        }
+    }
+
+    void Clicked()
+    {
+        isOk = false;
+        isError = false;
+        error = null;
+
+        Task.dateCreate = DateTime.Now;
+
+        try
+        {
+            Db.db.task.Add(Task);
+            Db.db.SaveChanges();
+            isOk = true;
+            Task = new Models.Task();
+        }
+        catch (Exception ex)
+        {
+            error = ex.InnerException?.Message;
+            isError = true;
+        }
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        names = Enum.GetValues(typeof(Models.Status)).Cast<Models.Status>();
+
+        return base.OnInitializedAsync();
+    }
+}

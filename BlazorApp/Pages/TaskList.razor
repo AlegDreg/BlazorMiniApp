@@ -1,0 +1,82 @@
+﻿@page "/list"
+
+@using BlazorApp
+@inject DbService Db
+
+@if (tasks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Заголовок</th>
+                <th>Дата создания</th>
+                <th>Статус</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in tasks)
+            {
+                <tr style="cursor:pointer;" @onclick="@(async () => await ShowChangeStatus(i.id))">
+                    <td>@i.title</td>
+                    <td>@i.dateCreate</td>
+                    <td>@i.status</td>
+                    <td>
+                        <form>
+                            <button @onclick="@(async () => await Delete(i.id))"
+                            type="submit" class="btn btn-danger">
+                                Удалить
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private BlazorApp.Models.Task[] tasks;
+    BlazorApp.Models.Status[] names;
+
+    protected override Task OnInitializedAsync()
+    {
+        names = Enum.GetValues(typeof(Models.Status)).Cast<Models.Status>().ToArray();
+        tasks = Db.db.task.ToArray();
+        return base.OnInitializedAsync();
+    }
+
+    async Task ShowChangeStatus(int taskId)
+    {
+        var task = tasks.First(x => x.id == taskId);
+        task.status = GetNextStatus(task);
+        Db.db.Update(task);
+        await Db.db.SaveChangesAsync();
+    }
+
+    Models.Status GetNextStatus(Models.Task task)
+    {
+        for (int i = 0; i < names.Length; i++)
+        {
+            if (names[i] == task.status)
+            {
+                if (i < names.Length - 1)
+                    return names[i + 1];
+                else
+                    return names[0];
+            }
+        }
+
+        return names[0];
+    }
+
+    async Task Delete(int taskId)
+    {
+        Db.db.task.Remove(tasks.First(x => x.id == taskId));
+        await Db.db.SaveChangesAsync();
+    }
+}
