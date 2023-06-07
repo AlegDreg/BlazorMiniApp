@@ -2,7 +2,7 @@
 
 A small application, on the Asp.Net Core, Blazor, Entity Framework Core, MySql.
 
-## What can he do?
+## What can the program do?
 - creating list items;
 - removing an item from the list;
 - small statistics about the elements;
