@@ -9,5 +9,5 @@ A small application, on the Asp.Net Core, Blazor, Entity Framework Core, MySql.
 - changing the status of an element.
 
 ## How to use it?
-- create a migration to mysql database;
+- create a migration to database;
 - launch.
