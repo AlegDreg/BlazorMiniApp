@@ -1,10 +1,10 @@
-﻿@page "/statistic"
+@page "/statistic"
 
 @using BlazorApp
 @inject DbService Db
 
 <h4>Всего задач: <b>@tasks.Length</b></h4>
-<h4>Выполнено: <b>@tasks.Where(x => x.status == Models.Status.Finished).ToList().Count</b></h4>
+<h4>Выполнено: <b>@tasks.Where(x => x.status == Models.Status.Finished).Count()</b></h4>
 
 @code {
     Models.Task[] tasks;
