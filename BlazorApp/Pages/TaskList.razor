@@ -1,4 +1,4 @@
-﻿@page "/list"
+@page "/list"
 
 @using BlazorApp
 @inject DbService Db
@@ -21,7 +21,7 @@ else
         <tbody>
             @foreach (var i in tasks)
             {
-                <tr style="cursor:pointer;" @onclick="@(async () => await ShowChangeStatus(i.id))">
+                <tr style="cursor:pointer;" @onclick="@(async () => await ChangeStatus(i.id))">
                     <td>@i.title</td>
                     <td>@i.dateCreate</td>
                     <td>@i.status</td>
@@ -50,7 +50,7 @@ else
         return base.OnInitializedAsync();
     }
 
-    async Task ShowChangeStatus(int taskId)
+    async Task ChangeStatus(int taskId)
     {
         var task = tasks.First(x => x.id == taskId);
         task.status = GetNextStatus(task);
